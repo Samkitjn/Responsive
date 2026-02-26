@@ -184,6 +184,7 @@ main section.view3 .bottom > p {
   }
   main section.view3 {
     flex-direction: row-reverse;
+    padding: 3rem 4rem;
   }
   main section.view3 .top,
   main section.view3 .bottom {
