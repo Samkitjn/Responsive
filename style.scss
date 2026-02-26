@@ -167,6 +167,56 @@ main{
 
     }
 
+    section.view4{
+        @include flexColumn(2rem);
+        width: 100%;
+        padding: 1rem;
+
+    .card{
+        border-radius: 0.7rem;
+        width: 100%;
+        background-image: url(./cardwebp.webp);
+        background-size: cover;
+        aspect-ratio: 1/1;
+
+        @include flexColumn(0rem);
+        justify-content: space-between;
+        padding: 1rem;
+
+        
+        .icon,.bottom{
+            background-color: rgba(187, 187, 187, 0.375);
+            backdrop-filter: blur(5px);
+            border: 1px solid white;
+            border-radius: 0.7rem;
+            padding: 0.5rem;
+        }
+
+        .top{
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .icon{
+            width: fit-content;
+            border-radius: 50%;
+        }
+
+        .bottom{
+            display: flex;
+            justify-content: space-between;
+            padding: 1.5rem 1rem;
+
+            p{
+                text-transform: uppercase;
+
+            }
+        }
+    }        
+
+
+    }
 
 }
 
@@ -233,7 +283,14 @@ main{
             }
         }
 
-        
+        section.view4{
+            flex-direction: row;
+            padding: 1rem 4rem;
+
+             .card{
+                width: 30%;
+             }
+        }
 
     }
     
