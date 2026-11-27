@@ -1,297 +1,1170 @@
-*{
-    margin: 0%;
-    padding: 0%;
-    box-sizing: border-box;
-}
+// 01. SCSS VARIABLES
+$bg-color: #1d1d1d;
+$card-color: #292929;
+$text-color: #f4f4f4;
+$muted-color: #b8b8b8;
+$accent-color: #d8e1b5;
+$border-color: rgba(255, 255, 255, 0.12);
 
-html, body{
-    height: 100%;
-    width: 100%;
-}
+$radius: 0.8rem;
+$transition: 0.3s ease;
+$max-width: 1600px;
 
-html{
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    color: rgb(244, 244, 244);
-    font-size: clamp(14px,1vw,18px);
-}
+$tablet: 768px;
+$laptop: 1024px;
+$desktop: 1240px;
 
-body{
-    background: #1d1d1d;
-}
-
-@mixin flexColumn($gap: 0rem){
+// 02. REUSABLE MIXINS
+@mixin flexColumn($gap: 0rem) {
     display: flex;
     flex-direction: column;
     gap: $gap;
 }
 
-section{
-    max-width: 2000px;
-}
-
-
-main{
-    width: 100%;
-    @include flexColumn(0rem);
+@mixin flexCenter {
+    display: flex;
     align-items: center;
-
-
-    section.view1{
-        width: 100%;
-        @include flexColumn(1rem);
-        padding: 1rem;
-
-
-        .top{
-            width: 100%;
-
-
-            img{
-                width: 100%;
-                border-radius: 0.7rem;
-            }
-        }
-
-        .bottom{
-            background-color: #292929;
-            border-radius: 10px;
-            padding: 1.5rem;
-            @include flexColumn(3rem);
-
-            .text{
-                @include flexColumn(0.7rem);
-
-
-                h1{
-                    font-weight: 200;
-                    font-size: 2.5rem;
-                    text-transform: uppercase;
-                }
-
-                p{
-                    font-weight: 300;
-                    font-size: 1.5rem;
-                    opacity: 0.6;
-                    line-height: 1.5;
-                }
-
-                button{
-                    width: fit-content;
-                    border: none;
-                    outline: none;
-                    padding: 0.7rem 1rem;
-                    border-radius: 0.7rem;
-                }
-            }
-        }
-    }
-
-    section.view2{
-        @include flexColumn(2.5rem);
-        width: 100%;
-        padding: 1rem;
-
-        .top,
-        .bottom{
-            display: flex;
-            width: 100%;
-            justify-content: space-around;
-
-            .element{
-                text-align: center;
-                @include flexColumn(0.2rem);
-                small{
-                    opacity: 0.6;
-                }
-                h2{
-                    font-size: 3rem;
-                    font-weight: 300;
-                }
-            }
-        }
-    }
-
-    section.view3{
-        width: 100%;
-        padding: 1rem;
-        @include flexColumn(1rem);
-
-
-        .top{
-            width: 100%;
-
-            img{
-                width: 100%;
-                border-radius: 0.7rem;
-            }
-
-        }
-
-        .bottom{
-            background-color: #292929;
-            border-radius: .7rem;
-            padding: 1rem;
-            @include flexColumn(3rem);
-
-
-            .text{
-                @include flexColumn(0.7rem);
-
-
-                h1{
-                    font-weight: 200;
-                    font-size: 2.5rem;
-                    text-transform: uppercase;
-                }
-
-                p{
-                    font-weight: 300;
-                    font-size: 1.5rem;
-                    opacity: 0.6;
-                    line-height: 1.5;
-                }
-
-                button{
-                    width: fit-content;
-                    border: none;
-                    outline: none;
-                    padding: 0.7rem 1rem;
-                    border-radius: 0.7rem;
-                }
-            }
-        }
-
-        .bottom>p{
-                text-transform: uppercase;
-            }
-
-    }
-
-    section.view4{
-        @include flexColumn(2rem);
-        width: 100%;
-        padding: 1rem;
-
-    .card{
-        border-radius: 0.7rem;
-        width: 100%;
-        background-image: url(./cardwebp.webp);
-        background-size: cover;
-        aspect-ratio: 1/1;
-
-        @include flexColumn(0rem);
-        justify-content: space-between;
-        padding: 1rem;
-
-        
-        .icon,.bottom{
-            background-color: rgba(187, 187, 187, 0.375);
-            backdrop-filter: blur(5px);
-            border: 1px solid white;
-            border-radius: 0.7rem;
-            padding: 0.5rem;
-        }
-
-        .top{
-            display: flex;
-            gap: 1rem;
-            justify-content: flex-end;
-        }
-
-        .icon{
-            width: fit-content;
-            border-radius: 50%;
-        }
-
-        .bottom{
-            display: flex;
-            justify-content: space-between;
-            padding: 1.5rem 1rem;
-
-            p{
-                text-transform: uppercase;
-
-            }
-        }
-    }        
-
-
-    }
-
+    justify-content: center;
 }
 
-@media (min-width:1240px){
-    main{
-        
-        section.view1{
-            flex-direction: row;
-            padding: 1rem 4rem;
+@mixin flexBetween {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
 
-            .top, 
-            .bottom{
-                width: 50%;
-            }
+@mixin gridLayout($columns, $gap: 1rem) {
+    display: grid;
+    grid-template-columns: repeat($columns, minmax(0, 1fr));
+    gap: $gap;
+}
 
-            .bottom{
-                justify-content: space-between;
-                // padding: 3rem;
+@mixin sectionWidth {
+    width: 100%;
+    max-width: $max-width;
+    margin-inline: auto;
+}
 
-                .text{
+@mixin panel {
+    background-color: $card-color;
+    border-radius: $radius;
+}
 
-                    margin: 2rem;
-                    gap: 1.5rem;
+@mixin glassEffect {
+    background-color: rgba(20, 20, 20, 0.72);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+}
 
-                    h1{
-                        font-size:3.5rem;
-                    }
+// 03. GLOBAL STYLING
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-                    p{
-                        width: 60%;
-                        font-size: 1rem;
-                    }
-                }
-            }
-        }
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
 
-        section.view2{
-            flex-direction: row;
-            padding: 3rem 4rem;
-        }
+    font-family: system-ui, -apple-system,
+        BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
 
-        section.view3{
-            flex-direction: row-reverse;
-            padding: 3rem 4rem;
+    font-size: clamp(14px, 1vw, 18px);
 
+    color: $text-color;
+}
 
-            .top,
-            .bottom{
-                width: 50%;
-            }
+body {
+    min-height: 100vh;
+    background-color: $bg-color;
+    line-height: 1.6;
+}
 
-            .bottom{
-                justify-content: space-between;
-                padding: 3rem;
+::selection {
+    background-color: $accent-color;
+    color: $bg-color;
+}
 
-                .paragraph{
-                    display: flex;
-                    gap: 2rem;
+a {
+    color: inherit;
+    text-decoration: none;
+}
 
-                    p{
-                        font-size: 1rem;
-                    }
-                }
-            }
-        }
+button {
+    font: inherit;
+    cursor: pointer;
+}
 
-        section.view4{
-            flex-direction: row;
-            padding: 1rem 4rem;
+ul {
+    list-style: none;
+}
 
-             .card{
-                width: 30%;
-             }
-        }
+img {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+}
 
+h1,
+h2,
+h3 {
+    line-height: 1.15;
+    overflow-wrap: break-word;
+}
+
+p {
+    overflow-wrap: break-word;
+}
+
+a:focus-visible,
+button:focus-visible {
+    outline: 2px solid $accent-color;
+    outline-offset: 5px;
+}
+
+section {
+    @include sectionWidth;
+}
+
+main {
+    @include flexColumn(1rem);
+    align-items: center;
+    padding: 0 1rem 1rem;
+}
+
+.skip-link {
+    position: absolute;
+    top: -100px;
+    left: 1rem;
+    z-index: 2000;
+
+    padding: 0.8rem 1.2rem;
+    background-color: $accent-color;
+    color: $bg-color;
+
+    &:focus {
+        top: 0.5rem;
     }
-    
+}
+
+// 04. REUSABLE COMPONENTS
+.logo {
+    display: inline-flex;
+    align-items: flex-start;
+
+    font-size: 2.4rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.15rem;
+
+    span {
+        font-size: 0.8rem;
+        letter-spacing: normal;
+        color: $accent-color;
+    }
+}
+
+.eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12rem;
+    color: $muted-color;
+}
+
+.status-dot {
+    display: inline-block;
+    flex-shrink: 0;
+
+    width: 0.55rem;
+    height: 0.55rem;
+    border-radius: 50%;
+    background-color: $accent-color;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+
+    width: fit-content;
+    min-height: 44px;
+
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
+
+    transition: color $transition;
+
+    .arrow-icon {
+        @include flexCenter;
+
+        width: 3rem;
+        height: 3rem;
+
+        border-radius: 50%;
+        border: 1px solid $border-color;
+        background-color: rgba(255, 255, 255, 0.06);
+
+        transition: background-color $transition,
+            color $transition,
+            transform $transition;
+
+        i {
+            font-size: 1.3rem;
+        }
+    }
+
+    &:hover {
+        color: $accent-color;
+
+        .arrow-icon {
+            background-color: $accent-color;
+            color: $bg-color;
+            transform: rotate(-10deg);
+        }
+    }
+}
+
+.section-heading {
+    @include flexColumn(1rem);
+
+    margin-bottom: 2rem;
+
+    > div {
+        @include flexColumn(0.8rem);
+    }
+
+    h2 {
+        font-size: clamp(2.4rem, 5vw, 4rem);
+        font-weight: 300;
+        text-transform: uppercase;
+        letter-spacing: -0.04em;
+
+        span {
+            color: $accent-color;
+        }
+    }
+
+    > p {
+        color: $muted-color;
+        font-size: 1.05rem;
+        max-width: 28rem;
+    }
+}
+
+// 05. NAVBAR
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    background-color: rgba(29, 29, 29, 0.96);
+    backdrop-filter: blur(15px);
+
+    border-bottom: 1px solid $border-color;
+}
+
+.navbar {
+    @include sectionWidth;
+    @include flexBetween;
+
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1.2rem;
+
+    .menu-toggle {
+        @include flexCenter;
+
+        width: 44px;
+        height: 44px;
+
+        background-color: $card-color;
+        color: $text-color;
+        border: 1px solid $border-color;
+        border-radius: 50%;
+
+        i {
+            font-size: 1.5rem;
+        }
+    }
+
+    .nav-links {
+        @include flexColumn(0.5rem);
+
+        width: 100%;
+        padding: 1rem;
+        border-radius: $radius;
+        background-color: $card-color;
+
+        li {
+            width: 100%;
+        }
+
+        a {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+
+            min-height: 44px;
+            padding: 0.75rem 1rem;
+
+            border-radius: 0.4rem;
+
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05rem;
+
+            transition: color $transition,
+                background-color $transition;
+
+            &:hover {
+                color: $accent-color;
+                background-color: rgba(255, 255, 255, 0.04);
+            }
+        }
+
+        .nav-btn {
+            justify-content: space-between;
+            background-color: $accent-color;
+            color: $bg-color;
+
+            &:hover {
+                background-color: $text-color;
+                color: $bg-color;
+            }
+        }
+    }
+}
+
+// Keep navigation usable even when JavaScript is disabled.
+
+.menu-toggle {
+    display: none !important;
+}
+
+.js {
+    .menu-toggle {
+        display: flex !important;
+    }
+
+    .nav-links {
+        display: none;
+
+        &.active {
+            display: flex;
+        }
+    }
+}
+
+// 06. HERO SECTION
+.view1 {
+    @include gridLayout(1);
+
+    padding-top: 1rem;
+
+    .top {
+        overflow: hidden;
+        border-radius: $radius;
+
+        img {
+            height: 100%;
+            aspect-ratio: 4 / 3;
+            object-fit: cover;
+
+            transition: transform 0.7s ease;
+        }
+
+        &:hover img {
+            transform: scale(1.035);
+        }
+    }
+
+    .bottom {
+        @include panel;
+        @include flexColumn(3rem);
+
+        padding: clamp(1.5rem, 4vw, 4rem);
+
+        .text {
+            @include flexColumn(1.5rem);
+
+            h1 {
+                font-size: clamp(2.5rem, 5vw, 5rem);
+                font-weight: 300;
+                text-transform: uppercase;
+                letter-spacing: -0.045em;
+
+                span {
+                    color: $accent-color;
+                }
+            }
+
+            .description {
+                max-width: 34rem;
+
+                font-size: clamp(1rem, 1.3vw, 1.2rem);
+                font-weight: 400;
+                color: $muted-color;
+                line-height: 1.8;
+            }
+
+            .btn {
+                margin-top: 0.5rem;
+            }
+        }
+    }
+}
+
+// 07. STUDIO HIGHLIGHTS
+.view2 {
+    @include gridLayout(2, 1rem);
+
+    padding: 2rem 0;
+
+    .element {
+        @include flexColumn(0.5rem);
+
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+
+        padding: 1.5rem 0.5rem;
+
+        border-bottom: 1px solid $border-color;
+
+        p {
+            color: $muted-color;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1rem;
+        }
+
+        h2 {
+            font-size: clamp(1.5rem, 3.2vw, 3rem);
+            font-weight: 300;
+        }
+    }
+}
+
+// 08. PHILOSOPHY SECTION
+.view3 {
+    @include gridLayout(1);
+
+    .top {
+        overflow: hidden;
+        border-radius: $radius;
+
+        img {
+            height: 100%;
+            aspect-ratio: 4 / 3;
+            object-fit: cover;
+
+            transition: transform 0.7s ease;
+        }
+
+        &:hover img {
+            transform: scale(1.035);
+        }
+    }
+
+    .bottom {
+        @include panel;
+        @include flexColumn(3rem);
+
+        padding: clamp(1.5rem, 4vw, 3rem);
+
+        .text {
+            @include flexColumn(1.5rem);
+
+            h2 {
+                font-size: clamp(2.3rem, 4vw, 3.8rem);
+                font-weight: 300;
+                text-transform: uppercase;
+                letter-spacing: -0.04em;
+
+                span {
+                    color: $accent-color;
+                }
+            }
+
+            .paragraphs {
+                @include gridLayout(1);
+
+                p {
+                    color: $muted-color;
+                    font-size: 1.05rem;
+                    line-height: 1.8;
+                }
+            }
+        }
+    }
+}
+
+// 09. SERVICES SECTION
+.services {
+    padding: 3rem 0;
+
+    .service-grid {
+        @include gridLayout(1);
+    }
+
+    .service-card {
+        @include panel;
+        @include flexColumn(2rem);
+
+        min-height: 20rem;
+        padding: 2rem;
+
+        border: 1px solid transparent;
+
+        transition: transform $transition,
+            border-color $transition,
+            background-color $transition;
+
+        .service-top {
+            @include flexBetween;
+
+            .service-number {
+                color: $muted-color;
+                font-size: 0.9rem;
+            }
+
+            > i {
+                @include flexCenter;
+
+                width: 3.5rem;
+                height: 3.5rem;
+
+                border-radius: 50%;
+                border: 1px solid $border-color;
+
+                font-size: 1.7rem;
+                color: $accent-color;
+
+                transition: background-color $transition,
+                    color $transition;
+            }
+        }
+
+        .service-content {
+            @include flexColumn(1rem);
+
+            h3 {
+                font-size: clamp(1.5rem, 2vw, 2rem);
+                font-weight: 400;
+            }
+
+            p {
+                color: $muted-color;
+                line-height: 1.8;
+                font-size: 1rem;
+            }
+        }
+
+        .service-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            min-height: 44px;
+            margin-top: auto;
+            padding-top: 1rem;
+
+            border-top: 1px solid $border-color;
+
+            font-size: 0.85rem;
+            text-transform: uppercase;
+
+            i {
+                font-size: 1.3rem;
+            }
+
+            &:hover {
+                color: $accent-color;
+            }
+        }
+
+        &:hover {
+            transform: translateY(-5px);
+            border-color: $accent-color;
+            background-color: #30302c;
+
+            .service-top > i {
+                background-color: $accent-color;
+                color: $bg-color;
+            }
+        }
+    }
+}
+
+// 10. TEAM SECTION
+.team {
+    padding: 1rem 0 3rem;
+
+    .view4 {
+        @include gridLayout(1);
+
+        .card {
+            @include flexColumn(1rem);
+
+            position: relative;
+            isolation: isolate;
+
+            justify-content: space-between;
+
+            min-width: 0;
+            min-height: 22rem;
+            aspect-ratio: 4 / 5;
+
+            padding: 1rem;
+            border-radius: $radius;
+            overflow: hidden;
+
+            background-color: $card-color;
+
+            &::before {
+                content: "";
+
+                position: absolute;
+                inset: 0;
+                z-index: -1;
+
+                background-size: cover;
+                background-position: center;
+
+                transition: transform 0.6s ease;
+            }
+
+            &:hover::before {
+                transform: scale(1.06);
+            }
+
+            .card-top {
+                display: flex;
+                justify-content: flex-end;
+
+                .team-number {
+                    @include glassEffect;
+
+                    padding: 0.6rem 1rem;
+
+                    border-radius: 2rem;
+                    font-size: 0.7rem;
+                    text-transform: uppercase;
+                    letter-spacing: 0.05rem;
+                }
+            }
+
+            .bottom {
+                @include glassEffect;
+                @include flexBetween;
+
+                gap: 0.75rem;
+                padding: 1rem;
+                border-radius: $radius;
+
+                > div {
+                    @include flexColumn(0.4rem);
+                    min-width: 0;
+                }
+
+                h3 {
+                    font-size: clamp(1.1rem, 1.5vw, 1.5rem);
+                    font-weight: 500;
+                }
+
+                p {
+                    color: $muted-color;
+                    font-size: 0.75rem;
+                    text-transform: uppercase;
+                    letter-spacing: 0.05rem;
+                }
+
+                .card-icon {
+                    @include flexCenter;
+
+                    flex-shrink: 0;
+                    width: 2.5rem;
+                    height: 2.5rem;
+
+                    border-radius: 50%;
+                    border: 1px solid $border-color;
+
+                    i {
+                        font-size: 1.2rem;
+                    }
+                }
+            }
+        }
+
+        .card1::before {
+            background-image:
+                linear-gradient(
+                    to top,
+                    rgba(0, 0, 0, 0.5),
+                    transparent
+                ),
+                url("./cardwebp.webp");
+        }
+
+        // Temporary decorative backgrounds.
+        // Replace with individual team images later.
+
+        .card2::before {
+            background-image:
+                linear-gradient(
+                    to top,
+                    rgba(0, 0, 0, 0.5),
+                    transparent
+                ),
+                url("./pexels-dayvidproductions-34921744.jpg");
+        }
+
+        .card3::before {
+            background-image:
+                linear-gradient(
+                    to top,
+                    rgba(0, 0, 0, 0.5),
+                    transparent
+                ),
+                url("./pexels-ron-lach-9849308.jpg");
+        }
+    }
+}
+
+// 11. CONTACT SECTION
+.contact {
+    @include flexColumn(2rem);
+
+    background-color: $accent-color;
+    color: $bg-color;
+
+    padding: clamp(2rem, 5vw, 5rem);
+    border-radius: $radius;
+
+    .contact-content {
+        @include flexColumn(1.5rem);
+
+        .eyebrow {
+            color: #3f4635;
+        }
+
+        h2 {
+            font-size: clamp(2.5rem, 5vw, 5rem);
+            font-weight: 300;
+            letter-spacing: -0.04em;
+            text-transform: uppercase;
+
+            span {
+                font-weight: 500;
+            }
+        }
+
+        > p:last-child {
+            max-width: 40rem;
+            color: #3f4635;
+            line-height: 1.8;
+        }
+    }
+
+    .contact-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+
+        width: fit-content;
+        max-width: 100%;
+        min-height: 48px;
+
+        padding: 1rem 1.5rem;
+        border-radius: 0.5rem;
+
+        background-color: $bg-color;
+        color: $text-color;
+
+        font-size: 0.85rem;
+        text-transform: uppercase;
+
+        transition: background-color $transition,
+            transform $transition;
+
+        i {
+            font-size: 1.4rem;
+        }
+
+        &:hover {
+            background-color: #41483a;
+            transform: translateY(-3px);
+        }
+
+        &:focus-visible {
+            outline-color: $bg-color;
+        }
+    }
+}
+
+// 12. FOOTER
+.footer {
+    @include sectionWidth;
+
+    padding: 3rem 1rem 1rem;
+
+    .footer-main {
+        @include gridLayout(1, 2rem);
+
+        padding-bottom: 2.5rem;
+
+        .footer-brand {
+            @include flexColumn(1.2rem);
+
+            p {
+                color: $muted-color;
+                max-width: 20rem;
+                font-size: 0.95rem;
+            }
+        }
+
+        .footer-links,
+        .footer-project {
+            @include flexColumn(0.6rem);
+
+            h2 {
+                margin-bottom: 0.5rem;
+
+                color: $accent-color;
+                font-size: 0.85rem;
+                text-transform: uppercase;
+                letter-spacing: 0.08rem;
+                font-weight: 500;
+            }
+
+            a,
+            p {
+                color: $muted-color;
+                font-size: 0.95rem;
+            }
+
+            a {
+                width: fit-content;
+                padding-block: 0.35rem;
+                transition: color $transition;
+
+                &:hover {
+                    color: $accent-color;
+                }
+            }
+        }
+    }
+
+    .footer-bottom {
+        @include flexColumn(1rem);
+
+        padding-top: 1.5rem;
+        border-top: 1px solid $border-color;
+
+        font-size: 0.8rem;
+        color: $muted-color;
+
+        a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+
+            width: fit-content;
+            min-height: 44px;
+
+            &:hover {
+                color: $accent-color;
+            }
+        }
+    }
+}
+
+// 13. TABLET RESPONSIVENESS
+@media (min-width: $tablet) {
+
+    main {
+        padding-inline: 2rem;
+        gap: 1.5rem;
+    }
+
+    .navbar {
+        padding-inline: 2rem;
+    }
+
+    .view1 {
+        .top img {
+            aspect-ratio: 16 / 10;
+        }
+    }
+
+    .view2 {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+
+        padding: 2.5rem 0;
+
+        .element {
+            padding: 1rem;
+            border-bottom: none;
+
+            &:not(:last-child) {
+                border-right: 1px solid $border-color;
+            }
+        }
+    }
+
+    .view3 {
+        .bottom {
+            .text {
+                .paragraphs {
+                    grid-template-columns: repeat(2, minmax(0, 1fr));
+                    gap: 1.5rem;
+                }
+            }
+        }
+    }
+
+    .section-heading {
+        flex-direction: row;
+        align-items: flex-end;
+        justify-content: space-between;
+
+        > p {
+            max-width: 23rem;
+        }
+    }
+
+    .services {
+        .service-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    .team {
+        .view4 {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    .footer {
+        padding-inline: 2rem;
+
+        .footer-main {
+            grid-template-columns: 2fr 1fr 1fr;
+        }
+
+        .footer-bottom {
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+        }
+    }
+}
+
+// 14. LAPTOP RESPONSIVENESS
+@media (min-width: $laptop) {
+
+    .navbar {
+
+        flex-wrap: nowrap;
+
+        .menu-toggle {
+            display: none !important;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+
+            gap: 0.6rem;
+            width: auto;
+            padding: 0;
+
+            background-color: transparent;
+
+            li {
+                width: auto;
+            }
+
+            .nav-btn {
+                padding-inline: 1.4rem;
+            }
+        }
+    }
+
+    .js {
+        .navbar {
+            .menu-toggle {
+                display: none !important;
+            }
+
+            .nav-links {
+                display: flex;
+            }
+        }
+    }
+
+    .view1 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+
+        .top {
+            img {
+                height: 100%;
+                aspect-ratio: auto;
+            }
+        }
+
+        .bottom {
+            justify-content: space-between;
+            min-height: 34rem;
+
+            .text {
+                gap: 1.5rem;
+            }
+        }
+    }
+
+    .view3 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+
+        .top {
+            grid-column: 2;
+            grid-row: 1;
+
+            img {
+                aspect-ratio: auto;
+                height: 100%;
+            }
+        }
+
+        .bottom {
+            grid-column: 1;
+            grid-row: 1;
+
+            justify-content: space-between;
+        }
+    }
+
+    .services {
+        .service-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .service-card {
+            min-height: 24rem;
+        }
+    }
+
+    .team {
+        .view4 {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+    }
+
+    .contact {
+        flex-direction: row;
+        align-items: flex-end;
+        justify-content: space-between;
+
+        .contact-content {
+            max-width: 75%;
+        }
+
+        .contact-btn {
+            flex-shrink: 0;
+        }
+    }
+}
+
+// 15. LARGE DESKTOP RESPONSIVENESS
+@media (min-width: $desktop) {
+
+    main {
+        padding-inline: 4rem;
+    }
+
+    .navbar {
+        padding-inline: 4rem;
+    }
+
+    .view1 {
+        .bottom {
+            min-height: 40rem;
+
+            .text {
+                h1 {
+                    font-size: clamp(3.5rem, 4.2vw, 5rem);
+                }
+
+                .description {
+                    max-width: 85%;
+                }
+            }
+        }
+    }
+
+    .view2 {
+        padding: 3rem 0;
+    }
+
+    .view3 {
+        .bottom {
+            min-height: 30rem;
+            padding: 3rem;
+
+            .text {
+                .paragraphs {
+                    gap: 2rem;
+                }
+            }
+        }
+    }
+
+    .services,
+    .team {
+        padding-block: 3rem;
+    }
+
+    .footer {
+        padding-inline: 4rem;
+    }
+}
+
+// 16. TOUCH DEVICES
+@media (hover: none) {
+
+    .service-card:hover,
+    .contact-btn:hover {
+        transform: none;
+    }
+
+    .view1 .top:hover img,
+    .view3 .top:hover img,
+    .team .view4 .card:hover::before {
+        transform: none;
+    }
+}
+
+// 17. ACCESSIBILITY - REDUCED MOTION
+@media (prefers-reduced-motion: reduce) {
+
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
 }
